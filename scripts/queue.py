@@ -36,7 +36,8 @@ def start(m, p, slots, ctx):
 
 
 def main():
-    rows = [l.split() for l in (ROOT / "configs" / "queue.txt").read_text().splitlines() if l.strip()]
+    qfile = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "configs" / "queue.txt"
+    rows = [l.split() for l in qfile.read_text().splitlines() if l.strip()]
     cur, proc = None, None
     try:
         for m, p, slots, ctx, rid in rows:
