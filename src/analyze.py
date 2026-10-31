@@ -32,11 +32,11 @@ def load(path):
 
 
 def per_question(recs):
-    """question_pos -> (tokens per question asked, correct 0/1)."""
+    """question_pos -> (tokens per question asked, correct 0/1, generation hit the cap 0/1)."""
     d = {}
     for r in recs:
         for j, p in enumerate(r["question_pos"]):
-            d[p] = (r["completion_tokens"] / r["k"], float(r["score"]["correct"][j]))
+            d[p] = (r["completion_tokens"] / r["k"], float(r["score"]["correct"][j]), float(r["score"]["cap_hit"]))
     return d
 
 
@@ -55,6 +55,7 @@ def summarize(name, recs):
         "tok/q_answered": toks / max(asked - nomit, 1), "tok/correct": toks / max(ncorrect, 1),
         "prompt_tok/q": ptok / asked,
         "cap_hit": np.mean([s["cap_hit"] for s in sc]), "loop": np.mean([s["loop"] for s in sc]),
+        "repeat": np.mean([s["repeat"] for s in sc]),
         "empty_think": np.mean([s["empty_think"] for s in sc]),
         "think_frac": sum(r["think_tokens"] for r in recs) / max(toks, 1),
     }
@@ -68,6 +69,8 @@ def ci(point, samples):
 def main():
     args = sys.argv[1:]
     ref = None
+    drop_capped = "--drop-capped" in args
+    args = [a for a in args if a != "--drop-capped"]
     if "--ref" in args:
         i = args.index("--ref")
         ref = args[i + 1]
@@ -82,6 +85,10 @@ def main():
 
     pq = {n: per_question(r) for n, r in runs.items()}
     pos = sorted(set.intersection(*(set(d) for d in pq.values())))
+    if drop_capped:  # sensitivity: drop every cluster in which ANY arm hit the cap on ANY of its questions
+        bad = {p // CLUSTER for p in pos if any(pq[n][p][2] for n in pq)}
+        pos = [p for p in pos if p // CLUSTER not in bad]
+        print(f"--drop-capped: removed {len(bad)} clusters with a cap hit in some arm")
     tok = {n: np.array([pq[n][p][0] for p in pos]) for n in runs}
     cor = {n: np.array([pq[n][p][1] for p in pos]) for n in runs}
     clusters = {}

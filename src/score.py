@@ -74,5 +74,7 @@ def score_generation(raw: str, golds: list[str], finish_reason: str) -> dict:
         "k": k, "correct": correct, "omitted": omitted, "n_boxed": len(boxed), "extra_boxed": extra,
         "cap_hit": finish_reason == "length", "think_closed": closed,
         "empty_think": closed and len(think) < 10,
-        "loop": is_loop(raw), "think_chars": len(think), "answer_chars": len(ans),
+        # repeat = repeated n-gram anywhere (includes harmless re-reading of the problem);
+        # loop = repeat AND cap hit, i.e. degenerate repetition that never finished.
+        "repeat": is_loop(raw), "loop": is_loop(raw) and finish_reason == "length", "think_chars": len(think), "answer_chars": len(ans),
     }
