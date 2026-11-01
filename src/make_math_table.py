@@ -95,21 +95,21 @@ for model, prec, prefix, suf in CELLS:
 if rows:
     tex = ["\\begin{table*}[t]", "\\centering", "\\footnotesize",
            "\\caption{MATH-500 (levels 1--3, 100 questions). $\\rho$ relative to $k{=}1$; ratio = $L$ of $k{=}4$ over the padding control; "
-           "length statistics are group-of-four means.}", "\\label{tab:math}", "\\begin{tabular}{llcccccccc}", "\\toprule",
+           "length statistics are group-of-four means.}", "\\label{tab:math}", "\\resizebox{\\textwidth}{!}{%", "\\begin{tabular}{llcccccccc}", "\\toprule",
            "Model & Prec. & Acc k=1 (\\%) & Acc k=4 (\\%) & $\\Delta$ acc (pts) & $\\rho_{med}$ k=4 & $\\rho_{mean}$ k=4 & "
            "$\\rho_{med}$ pad & $\\rho_{mean}$ pad & Cap hit k=1/k=4 (\\%) \\\\", "\\midrule"]
     tex += [" & ".join(r[:9] + [r[-1]]) + " \\\\" for r in rows]
-    tex += ["\\bottomrule", "\\end{tabular}", "\\end{table*}"]
+    tex += ["\\bottomrule", "\\end{tabular}}", "\\end{table*}"]
     (ROOT / "paper" / "tables" / "tab_math.tex").write_text("\n".join(tex) + "\n", encoding="utf-8")
     rt = ["\\begin{table}[t]", "\\centering", "\\footnotesize",
           "\\caption{MATH-500: length of $k{=}4$ relative to the padding control (95\\% CI) and accuracy difference.}",
-          "\\label{tab:mathpad}", "\\begin{tabular}{llccc}", "\\toprule",
+          "\\label{tab:mathpad}", "\\resizebox{\\columnwidth}{!}{%", "\\begin{tabular}{llccc}", "\\toprule",
           "Model & Prec. & $L_{med}$ k=4 / pad & $L_{mean}$ k=4 / pad & $\\Delta$ acc k=4 $-$ pad \\\\", "\\midrule"]
     for (model, prec, prefix, suf) in [c for c in CELLS if complete(c[2], c[3])]:
         o = {x[1]: x for x in out if x[0] == prefix + suf}
         rt.append(f"{model} & {prec} & {fmt(o['ratio_med_k4_pad'][2:])} & {fmt(o['ratio_mean_k4_pad'][2:])} & "
                   f"{fmt(o['dacc_k4_pad'][2:], 1, 100)} \\\\")
-    rt += ["\\bottomrule", "\\end{tabular}", "\\end{table}"]
+    rt += ["\\bottomrule", "\\end{tabular}}", "\\end{table}"]
     (ROOT / "paper" / "tables" / "tab_mathpad.tex").write_text("\n".join(rt) + "\n", encoding="utf-8")
 with open(ROOT / "analysis" / "results_math.csv", "w", newline="") as f:
     csv.writer(f).writerows([["cell", "key", "point", "lo", "hi"]] + out)

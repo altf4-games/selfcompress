@@ -103,9 +103,10 @@ def write_tex(name, header, rows, caption, label, star=True):
     env = "table*" if star else "table"
     cols = "ll" + "c" * (len(header) - 2)
     lines = [f"\\begin{{{env}}}[t]", "\\centering", "\\footnotesize", f"\\caption{{{caption}}}", f"\\label{{{label}}}",
+             f"\\resizebox{{\\{'textwidth' if star else 'columnwidth'}}}{{!}}{{%",
              f"\\begin{{tabular}}{{{cols}}}", "\\toprule", " & ".join(header) + " \\\\", "\\midrule"]
     lines += [" & ".join(r) + " \\\\" for r in rows]
-    lines += ["\\bottomrule", "\\end{tabular}", f"\\end{{{env}}}"]
+    lines += ["\\bottomrule", "\\end{tabular}}", f"\\end{{{env}}}"]
     (ROOT / "paper" / "tables" / f"{name}.tex").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -174,8 +175,7 @@ for m, p, c in [x for x in CELLS if has_s2(x[2])]:
         for f, fn in ((med, "median"), (mean, "mean")):
             t = rho(f"{c}_k4{s}", f"{c}_k1{s}", f); r.append(fmt(t)); log("seed", c, f"rho_k4_{fn}{s or '_s1'}", t)
     t = rho(f"{c}_k1_s2", f"{c}_k1", mean); r.append(fmt(t)); log("seed", c, "k1_seed_noise_mean", t)
-    if c in ("q17_f16", "q17_q8", "q17_q4", "q06_f16"):  # the paper text describes these four; other cells go to the CSV
-        rows.append(r)
+    rows.append(r)
 write_tex("tab_seed", ["Model", "Prec.", "$\\rho_{med}$ s1", "$\\rho_{mean}$ s1", "$\\rho_{med}$ s2", "$\\rho_{mean}$ s2", "seed noise (k=1 s2 vs s1)"],
           rows, "Replication with a second seed ($\\rho$ for k=4). Last column: $1-L_{s2}(1)/L_{s1}(1)$ for k=1, the length difference due to sampling alone.", "tab:seed")
 
