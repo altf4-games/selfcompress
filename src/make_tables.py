@@ -231,6 +231,19 @@ for a in axs[:, 0]:
 fig2.tight_layout()
 fig2.savefig(ROOT / "paper" / "figures" / "fig_dist.pdf"); fig2.savefig(ROOT / "paper" / "figures" / "fig_dist.png", dpi=200)
 
+# ---- text claims: cap-hit sensitivity (1.7B F16) and 0.6B empty-control per-question medians
+arms = [f"q17_f16_{a}" for a in ("k1", "k2", "k4", "pad")]
+capg = np.any([run(a)["cap"].reshape(75, 4).max(axis=1) > 0 for a in arms], axis=0)
+kept = np.where(~capg)[0]
+kb = kept[np.random.default_rng(3).integers(0, len(kept), (B, len(kept)))]
+r4, rp = gtok("q17_f16_k4"), gtok("q17_f16_pad")
+log("sens", "q17_f16", "groups_dropped_capped", (float(capg.sum()),) * 3)
+log("sens", "q17_f16", "ratio_mean_k4_pad_nocap",
+    (r4[kept].mean() / rp[kept].mean(), *np.percentile(r4[kb].mean(axis=1) / rp[kb].mean(axis=1), [2.5, 97.5])))
+for a in ("k1", "empty"):
+    v = float(np.median(run(f"q06_f16_{a}")["tok"]))
+    log("emptymed", "q06_f16", f"median_tokens_{a}", (v, v, v))
+
 with open(ROOT / "analysis" / "results.csv", "w", newline="") as f:
     csv.writer(f).writerows([["table", "cell", "key", "point", "lo", "hi"]] + csv_rows)
 

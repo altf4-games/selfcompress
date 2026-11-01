@@ -137,3 +137,7 @@ tail,q06_q4,rho_pad_p50,0.3254,0.2242,0.4142
 tail,q06_q4,rho_pad_p90,0.3499,0.2253,0.4599
 tail,q06_q4,ratio_k4_pad_p50,0.6045,0.5383,0.7233
 tail,q06_q4,ratio_k4_pad_p90,0.8238,0.6792,1.0000
+sens,q17_f16,groups_dropped_capped,9.0000,9.0000,9.0000
+sens,q17_f16,ratio_mean_k4_pad_nocap,0.6007,0.5448,0.6622
+emptymed,q06_f16,median_tokens_k1,1004.0000,1004.0000,1004.0000
+emptymed,q06_f16,median_tokens_empty,1755.0000,1755.0000,1755.0000
