@@ -53,6 +53,17 @@ def is_loop(text: str, n: int = 10, thresh: int = 15) -> bool:
     return c.most_common(1)[0][1] >= thresh
 
 
+def is_degenerate(text: str, n: int = 10, tail_words: int = 1500, thresh: int = 50) -> bool:
+    """Degenerate repetition: one word n-gram repeated >= thresh times within the last tail_words words.
+    Threshold chosen from the 76 capped GSM8K generations of the main grid: tail counts are 2-21 for ordinary long
+    reasoning and 249-1490 for true loops (nothing between), so any threshold in 22..248 gives the same split."""
+    w = text.split()[-tail_words:]
+    if len(w) < n * 2:
+        return False
+    c = Counter(tuple(w[i:i + n]) for i in range(len(w) - n + 1))
+    return c.most_common(1)[0][1] >= thresh
+
+
 def score_generation(raw: str, golds: list[str], finish_reason: str) -> dict:
     """golds: gold answer string per question, in order. Answers are taken from the text after </think>."""
     k = len(golds)
@@ -81,6 +92,6 @@ def score_generation(raw: str, golds: list[str], finish_reason: str) -> dict:
         "cap_hit": finish_reason == "length", "think_closed": closed,
         "empty_think": closed and len(think) < 10,
         # repeat = repeated n-gram anywhere (includes harmless re-reading of the problem);
-        # loop = repeat AND cap hit, i.e. degenerate repetition that never finished.
-        "repeat": is_loop(raw), "loop": is_loop(raw) and finish_reason == "length", "think_chars": len(think), "answer_chars": len(ans),
+        # loop = cap hit AND degenerate repetition in the tail (see is_degenerate).
+        "repeat": is_loop(raw), "loop": finish_reason == "length" and is_degenerate(raw), "think_chars": len(think), "answer_chars": len(ans),
     }

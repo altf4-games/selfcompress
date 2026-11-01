@@ -30,7 +30,7 @@ RUNS = {}
 def run(rid):
     if rid in RUNS:
         return RUNS[rid]
-    f, c = ROOT / "runs" / f"{rid}.jsonl", CACHE / f"{rid}.json"
+    f, c = ROOT / "runs" / f"{rid}.jsonl", CACHE / f"{rid}.v2.json"  # v2: tail-based loop detector
     size = f.stat().st_size
     if c.exists() and json.loads(c.read_text())["size"] == size:
         d = json.loads(c.read_text())
@@ -187,7 +187,7 @@ for m, p, c in CELLS:
         rows.append([m, p, str(k), f"{100 * np.mean(d['meta']['loop']):.1f}", f"{100 * np.mean(d['meta']['repeat']):.1f}",
                      f"{100 * np.mean(d['meta']['empty_think']):.1f}", f"{100 * d['meta']['think'] / d['meta']['comp']:.0f}"])
 write_tex("tab_diag", ["Model", "Prec.", "k", "Loop (\\%)", "Repeat (\\%)", "Empty think (\\%)", "Think share of tokens (\\%)"],
-          rows, "Diagnostics per generation: loop = repeated 10-gram and cap hit; repeat = repeated 10-gram only.", "tab:diag", star=False)
+          rows, "Diagnostics per generation: loop = cap hit and a 10-gram repeated at least 50 times in the last 1500 words; repeat = repeated 10-gram only.", "tab:diag", star=False)
 
 # ---- Table VII: tail test. rho at the median and the 90th percentile of per-question length
 def rho_gq(a, b, q):

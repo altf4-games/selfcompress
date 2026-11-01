@@ -1,4 +1,4 @@
-run_id: m500_q17_f16_k1
+﻿run_id: m500_q17_f16_k1
 model: Qwen3-1.7B
 gguf: models/Qwen3-1.7B-F16.gguf
 precision: F16

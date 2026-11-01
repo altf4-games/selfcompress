@@ -1,1 +1,28 @@
-# selfcompress
+# Self-Compression in small quantized reasoning models
+
+Controlled study of whether "Self-Compression" (shorter per-question reasoning when one prompt packs several
+independent questions) appears in Qwen3-0.6B and Qwen3-1.7B, and whether it survives F16, Q8_0 and Q4_K_M GGUF
+quantization. Runtime: llama.cpp b12019 (commit 1052f7e1d). Data: GSM8K test (300 questions, seed 20261031) and
+MATH-500 levels 1-3 (100 questions, seed 20261101). The paper is in `paper/`.
+
+## Layout
+- `data/` fixed question lists and the scripts that make them
+- `configs/` one YAML per run (model, GGUF, k, condition, seed, sampling); `configs/queue*.txt` are run queues
+- `src/prompts.py` prompt builder and controls; `src/run.py` async, resumable llama.cpp client writing `runs/<id>.jsonl`
+- `src/score.py` Math-Verify scoring, omission / cap-hit / loop detectors
+- `src/make_tables.py`, `src/make_math_table.py` canonical analysis (group-level lengths, cluster bootstrap) -> `paper/tables`, `paper/figures`, `analysis/*.csv`
+- `src/analyze.py` per-run summaries (not the canonical length statistics, see its docstring)
+- `src/handcheck*.py`, `src/test_score.py` validity checks
+- `runs/` raw generation logs (never edited); `scripts/` server, conversion and queue helpers
+
+## Reproduce
+1. Download llama.cpp b12019 and the Qwen3-0.6B / 1.7B Hugging Face checkpoints; convert and quantize with
+   `scripts/convert.ps1` (F16 via `convert_hf_to_gguf.py`, then `llama-quantize` to Q8_0 and Q4_K_M).
+2. `python scripts/make_configs.py` (and `make_extra.py`, `make_math_cfg.py`, `make_final_cfg.py`) write the configs and queues.
+3. `python scripts/queue.py configs/queue.txt` starts a server per (model, precision) and runs every config; reruns resume.
+4. `python src/make_tables.py` and `python src/make_math_table.py` regenerate all tables and figures; `latexmk -pdf` in `paper/`.
+
+## Notes
+- Sampling is temperature 0.6, top_p 0.95, top_k 20, min_p 0, max 8192 new tokens, thinking mode on.
+- Only an RTX 4060 Laptop GPU (8 GB) was used.
+- No license has been chosen yet.
