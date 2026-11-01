@@ -1,0 +1,13 @@
+run_id: q17_f16_pad8
+model: Qwen3-1.7B
+gguf: models/Qwen3-1.7B-F16.gguf
+precision: F16
+condition: padding
+k: 1
+k_ref: 8
+seed: 1
+n_questions: 288
+server: http://127.0.0.1:8089
+slots: 2
+max_tokens: 8192
+sampling: {temperature: 0.6, top_p: 0.95, top_k: 20, min_p: 0.0}

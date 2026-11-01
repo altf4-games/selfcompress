@@ -1,0 +1,13 @@
+run_id: r15_f16_pad
+model: R1-Distill-Qwen-1.5B
+gguf: models/R1-Distill-Qwen-1.5B-F16.gguf
+precision: F16
+condition: padding
+k: 1
+k_ref: 4
+seed: 1
+n_questions: 300
+server: http://127.0.0.1:8089
+slots: 8
+max_tokens: 8192
+sampling: {temperature: 0.6, top_p: 0.95, top_k: 20, min_p: 0.0}

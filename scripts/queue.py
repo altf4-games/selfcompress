@@ -10,7 +10,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-NAMES = {"q17": "Qwen3-1.7B", "q06": "Qwen3-0.6B"}
+NAMES = {"q17": "Qwen3-1.7B", "q06": "Qwen3-0.6B", "q4b": "Qwen3-4B", "r15": "R1-Distill-Qwen-1.5B"}
 PREC = {"f16": "F16", "q8": "Q8_0", "q4": "Q4_K_M"}
 
 

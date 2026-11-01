@@ -5,12 +5,14 @@ Conditions
   padding    k=1 question preceded by neutral filler matched in length to the k=4 prompt
   statement  k=1 question followed by k-1 declarative statements (not questions)
   empty      k=1 question plus k-1 numbered slots with no content
+  concise    k=1 question with one added instruction asking for concise reasoning (our wording, not ConPress's)
 
 NOTE: the statement and empty controls are OUR reading of the ConPress ablation design.
 Verify against the ConPress PDF (arXiv 2602.01472) before describing them as theirs.
 """
 
 SYSTEM = "Please reason step by step, and put your final answer within \\boxed{}."
+CONCISE_LINE = "Keep your reasoning concise."
 MULTI_LINE = "Answer each question separately and put each final answer in its own \\boxed{}, in order."
 
 # Neutral, question-free filler sentences (deterministic, cycled to the needed length).
@@ -62,6 +64,9 @@ def build_messages(condition: str, questions: list[str], k_ref: int = 4, ref_cha
                 {"role": "user", "content": user_text(questions)}], k
     assert len(questions) == 1, "controls apply to k=1 questions"
     q = questions[0]
+    if condition == "concise":
+        return [{"role": "system", "content": system_text(1) + "\n" + CONCISE_LINE},
+                {"role": "user", "content": user_text([q])}], 1
     if condition == "padding":
         base = user_text([q])
         filler = make_filler(max(0, ref_chars - len(base) - 2))
