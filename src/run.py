@@ -61,7 +61,8 @@ async def one(client, cfg, u, props, out_f, lock, sem):
             "run_id": cfg["run_id"], "unit_id": u["unit_id"], "model": cfg["model"], "gguf": cfg["gguf"],
             "precision": cfg["precision"], "condition": cond, "k": k, "seed": cfg["seed"],
             "question_pos": [x["pos"] for x in u["items"]], "test_idx": [x["test_idx"] for x in u["items"]],
-            "gold": [x["answer"].split("####")[-1].strip().replace(",", "") for x in u["items"]],
+            "gold": [x["gold"] if "gold" in x else x["answer"].split("####")[-1].strip().replace(",", "")
+                     for x in u["items"]],
             "rendered_prompt": rendered, "raw_output": raw, "finish_reason": ch["finish_reason"],
             "prompt_tokens": r["usage"]["prompt_tokens"], "completion_tokens": r["usage"]["completion_tokens"],
             "think_tokens": think_tok, "timings": r.get("timings"), "wall_s": time.time() - t0,
@@ -73,7 +74,7 @@ async def one(client, cfg, u, props, out_f, lock, sem):
 
 async def main(cfg_path):
     cfg = yaml.safe_load(Path(cfg_path).read_text(encoding="utf-8-sig"))
-    items = json.loads((ROOT / "data" / "gsm8k_300.json").read_text())["items"]
+    items = json.loads((ROOT / "data" / cfg.get("data_file", "gsm8k_300.json")).read_text())["items"]
     units = make_units(cfg, items)
     out_path = ROOT / "runs" / f"{cfg['run_id']}.jsonl"
     done = set()

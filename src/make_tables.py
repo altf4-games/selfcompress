@@ -57,16 +57,33 @@ def est(g):
     return pt, *np.percentile(bs, [2.5, 97.5])
 
 
+# Length statistics are computed at the GROUP level for every arm: the mean tokens per question over each group of 4
+# consecutive questions (75 groups). For k>1 a prompt's tokens are shared by its questions, so per-question values are
+# prompt averages; comparing a median of averages with a median of single-question lengths would be biased.
+# The mean over groups equals the mean over questions.
+GX = np.random.default_rng(1).integers(0, 75, (B, 75))
+GALL = np.arange(75)
+
+
+def gtok(rid):
+    return run(rid)["tok"].reshape(75, 4).mean(axis=1)
+
+
+def est_g(g):
+    pt, bs = g(GALL), g(GX)
+    return pt, *np.percentile(bs, [2.5, 97.5])
+
+
 med = lambda a, X: np.median(a[X], axis=-1)  # noqa: E731
 mean = lambda a, X: np.mean(a[X], axis=-1)  # noqa: E731
 
 
-def rho(a, b, f):  # 1 - L(a)/L(b)
-    return est(lambda X: 1 - f(run(a)["tok"], X) / f(run(b)["tok"], X))
+def rho(a, b, f):  # 1 - L(a)/L(b), group level
+    return est_g(lambda X: 1 - f(gtok(a), X) / f(gtok(b), X))
 
 
-def ratio(a, b, f):  # L(a)/L(b)
-    return est(lambda X: f(run(a)["tok"], X) / f(run(b)["tok"], X))
+def ratio(a, b, f):  # L(a)/L(b), group level
+    return est_g(lambda X: f(gtok(a), X) / f(gtok(b), X))
 
 
 def dacc(a, b):  # acc(a) - acc(b)
@@ -100,7 +117,7 @@ def log(table, cell, key, t):
 # ---- Table I: length compression rho vs k=1
 rows = []
 for m, p, c in CELLS:
-    r = [m, p, f"{np.median(run(c + '_k1')['tok']):.0f}"]
+    r = [m, p, f"{np.median(gtok(c + '_k1')):.0f}"]
     for f, fn in ((med, "median"), (mean, "mean")):
         for k in (2, 4):
             t = rho(f"{c}_k{k}", f"{c}_k1", f)
@@ -164,6 +181,48 @@ for m, p, c in CELLS:
                      f"{100 * np.mean(d['meta']['empty_think']):.1f}", f"{100 * d['meta']['think'] / d['meta']['comp']:.0f}"])
 write_tex("tab_diag", ["Model", "Prec.", "k", "Loop (\\%)", "Repeat (\\%)", "Empty think (\\%)", "Think share of tokens (\\%)"],
           rows, "Diagnostics per generation: loop = repeated 10-gram and cap hit; repeat = repeated 10-gram only.", "tab:diag", star=False)
+
+# ---- Table VII: tail test. rho at the median and the 90th percentile of per-question length
+def rho_gq(a, b, q):
+    return est_g(lambda X: 1 - np.quantile(gtok(a)[X], q, axis=-1) / np.quantile(gtok(b)[X], q, axis=-1))
+
+
+def ratio_gq(a, b, q):
+    return est_g(lambda X: np.quantile(gtok(a)[X], q, axis=-1) / np.quantile(gtok(b)[X], q, axis=-1))
+
+
+rows = []
+for m, p, c in CELLS:
+    r = [m, p]
+    for arm in ("k4", "pad"):
+        for q in (0.5, 0.9):
+            t = rho_gq(f"{c}_{arm}", f"{c}_k1", q); r.append(fmt(t)); log("tail", c, f"rho_{arm}_p{int(q * 100)}", t)
+    for q in (0.5, 0.9):
+        log("tail", c, f"ratio_k4_pad_p{int(q * 100)}", ratio_gq(f"{c}_k4", f"{c}_pad", q))
+    rows.append(r)
+write_tex("tab_tail", ["Model", "Prec.", "$\\rho$ k=4, p50", "$\\rho$ k=4, p90", "$\\rho$ padding, p50", "$\\rho$ padding, p90"],
+          rows, "Group-level compression: $\\rho$ at the median (p50) and 90th percentile (p90) of the mean tokens per question over groups of four questions, computed the same way for every arm.", "tab:tail")
+
+# ---- Figure 2: complementary CDF of per-question length (log x), tail shown directly
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+BLUE, ORANGE = "#0072B2", "#E69F00"
+fig2, axs = plt.subplots(2, 3, figsize=(7.2, 3.9), sharex=True, sharey=True)
+for a, (m, p, c) in zip(axs.ravel(), CELLS):
+    for key, col, ls, lab in (("k1", "k", "-", "k=1"), ("k4", BLUE, "-", "k=4"), ("pad", ORANGE, "--", "padding")):
+        v = np.sort(gtok(f"{c}_{key}"))
+        a.plot(v, 1 - np.arange(1, len(v) + 1) / len(v), color=col, ls=ls, lw=1.2, label=lab)
+    a.set_xscale("log"); a.set_title(f"{m} {p.replace(chr(92), '')}", fontsize=7)
+    a.tick_params(labelsize=6); a.spines[["top", "right"]].set_visible(False)
+axs[0, 0].legend(fontsize=6, frameon=False)
+for a in axs[1]:
+    a.set_xlabel("mean tokens per question, per group of 4 (log)", fontsize=6)
+for a in axs[:, 0]:
+    a.set_ylabel("fraction of groups longer", fontsize=7)
+fig2.tight_layout()
+fig2.savefig(ROOT / "paper" / "figures" / "fig_dist.pdf"); fig2.savefig(ROOT / "paper" / "figures" / "fig_dist.png", dpi=200)
 
 with open(ROOT / "analysis" / "results.csv", "w", newline="") as f:
     csv.writer(f).writerows([["table", "cell", "key", "point", "lo", "hi"]] + csv_rows)

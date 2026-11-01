@@ -34,6 +34,12 @@ def extract_boxed(text: str) -> list[str]:
         i = k
 
 
+def gold_parsed(g: str):
+    """Parse a gold answer: plain numbers (GSM8K) directly, LaTeX answers (MATH) inside $...$ if the bare parse is empty."""
+    r = parse(g, parsing_timeout=None)
+    return r if r else parse("$" + g + "$", parsing_timeout=None)
+
+
 def gold_answer(gsm_answer: str) -> str:
     return gsm_answer.split("####")[-1].strip().replace(",", "")
 
@@ -62,7 +68,7 @@ def score_generation(raw: str, golds: list[str], finish_reason: str) -> dict:
             if verify is not None:
                 try:
                     # Timeouts are disabled: Math-Verify's multiprocessing timeout fails on Windows.
-                    ok = bool(verify(parse(g, parsing_timeout=None),
+                    ok = bool(verify(gold_parsed(g),
                                      parse("\\boxed{" + used[i] + "}", parsing_timeout=None), timeout_seconds=None))
                 except Exception:
                     ok = False

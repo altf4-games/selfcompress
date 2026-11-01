@@ -7,6 +7,8 @@ Every arm is compared on the SAME questions. The bootstrap resamples CLUSTERS of
 into one prompt are not treated as independent, and the same resamples are used for all arms (paired).
 
 Per-question tokens for k>1 are the prompt's completion tokens split evenly over its k questions.
+NOTE: medians here are per-question medians, which are biased upward for k>1 (a median of prompt averages).
+The paper's length statistics come from src/make_tables.py, which compares group-of-4 means for every arm.
 Reported per arm: accuracy (+CI), omitted, tokens per question asked / answered / correct, cap-hit, loop,
 empty-think. Versus the base arm: rho = 1 - L(arm)/L(base) (median and mean) and the accuracy difference.
 With --ref: ratio L(arm)/L(ref) and accuracy difference versus the reference arm (e.g. the padding control).
