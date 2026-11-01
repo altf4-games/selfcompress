@@ -3,3 +3,13 @@ models/
 __pycache__/
 *.pyc
 
+paper/*.aux
+paper/*.log
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.bbl
+paper/*.blg
+paper/*.out
+analysis/conpress.txt
+analysis/page*.png
+analysis/cache/
