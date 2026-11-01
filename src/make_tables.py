@@ -162,13 +162,20 @@ write_tex("tab_ctrl", ["Model", "Prec.", "stmt med", "stmt mean", "empty med", "
 
 # ---- Table V: seed replication
 rows = []
-for m, p, c in [x for x in CELLS if x[2] in ("q17_f16", "q17_q8", "q17_q4", "q06_f16")]:
+def has_s2(c):  # a cell is included only if its seed-2 runs are complete (k=1, k=4, padding)
+    return all((ROOT / "runs" / f"{c}_{a}_s2.jsonl").exists() and
+               sum(1 for _ in open(ROOT / "runs" / f"{c}_{a}_s2.jsonl", encoding="utf-8")) == (75 if a == "k4" else 300)
+               for a in ("k1", "k4", "pad"))
+
+
+for m, p, c in [x for x in CELLS if has_s2(x[2])]:
     r = [m, p]
     for s in ("", "_s2"):
         for f, fn in ((med, "median"), (mean, "mean")):
             t = rho(f"{c}_k4{s}", f"{c}_k1{s}", f); r.append(fmt(t)); log("seed", c, f"rho_k4_{fn}{s or '_s1'}", t)
     t = rho(f"{c}_k1_s2", f"{c}_k1", mean); r.append(fmt(t)); log("seed", c, "k1_seed_noise_mean", t)
-    rows.append(r)
+    if c in ("q17_f16", "q17_q8", "q17_q4", "q06_f16"):  # the paper text describes these four; other cells go to the CSV
+        rows.append(r)
 write_tex("tab_seed", ["Model", "Prec.", "$\\rho_{med}$ s1", "$\\rho_{mean}$ s1", "$\\rho_{med}$ s2", "$\\rho_{mean}$ s2", "seed noise (k=1 s2 vs s1)"],
           rows, "Replication with a second seed ($\\rho$ for k=4). Last column: $1-L_{s2}(1)/L_{s1}(1)$ for k=1, the length difference due to sampling alone.", "tab:seed")
 

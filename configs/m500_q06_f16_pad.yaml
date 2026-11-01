@@ -1,0 +1,14 @@
+run_id: m500_q06_f16_pad
+model: Qwen3-0.6B
+gguf: models/Qwen3-0.6B-F16.gguf
+precision: F16
+data_file: math500_L123_100.json
+condition: padding
+k: 1
+k_ref: 4
+seed: 1
+n_questions: 100
+server: http://127.0.0.1:8089
+slots: 8
+max_tokens: 8192
+sampling: {temperature: 0.6, top_p: 0.95, top_k: 20, min_p: 0.0}

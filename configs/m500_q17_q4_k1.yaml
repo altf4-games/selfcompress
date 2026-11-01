@@ -1,0 +1,13 @@
+run_id: m500_q17_q4_k1
+model: Qwen3-1.7B
+gguf: models/Qwen3-1.7B-Q4_K_M.gguf
+precision: Q4_K_M
+data_file: math500_L123_100.json
+condition: multi
+k: 1
+seed: 1
+n_questions: 100
+server: http://127.0.0.1:8089
+slots: 8
+max_tokens: 8192
+sampling: {temperature: 0.6, top_p: 0.95, top_k: 20, min_p: 0.0}
