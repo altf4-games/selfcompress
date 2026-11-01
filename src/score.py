@@ -1,5 +1,6 @@
 """Scoring: Math-Verify per question index, omission / cap / loop / empty-think detectors."""
 import logging
+import re
 from collections import Counter
 
 logging.getLogger().setLevel(logging.ERROR)  # Math-Verify warns on every call when timeouts are off
@@ -36,8 +37,12 @@ def extract_boxed(text: str) -> list[str]:
 
 def gold_parsed(g: str):
     """Parse a gold answer: plain numbers (GSM8K) directly, LaTeX answers (MATH) inside $...$ if the bare parse is empty."""
-    r = parse(g, parsing_timeout=None)
-    return r if r else parse("$" + g + "$", parsing_timeout=None)
+    if re.fullmatch(r"-?[\d,\.]+", g.strip()):  # plain number (all GSM8K golds): bare parse, as before
+        r = parse(g, parsing_timeout=None)
+        if r:
+            return r
+    # LaTeX gold: parse as math. A bare parse of e.g. "2k+2" would return only the number 2 and mark correct answers wrong.
+    return parse("$" + g + "$", parsing_timeout=None)
 
 
 def gold_answer(gsm_answer: str) -> str:
