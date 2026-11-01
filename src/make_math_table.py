@@ -111,6 +111,33 @@ if rows:
                   f"{fmt(o['dacc_k4_pad'][2:], 1, 100)} \\\\")
     rt += ["\\bottomrule", "\\end{tabular}}", "\\end{table}"]
     (ROOT / "paper" / "tables" / "tab_mathpad.tex").write_text("\n".join(rt) + "\n", encoding="utf-8")
+if rows:
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    cells = [c for c in CELLS if complete(c[2], c[3])]
+    lab = [f"{m}\n{p.replace(chr(92), '').replace(' (seed 2)', ' s2')}" for m, p, _, _ in cells]
+    names = [pre + suf for _, _, pre, suf in cells]
+    x = np.arange(len(cells))
+    get = lambda cell, key: next(r for r in out if r[0] == cell and r[1] == key)[2:]  # noqa: E731
+    fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.4))
+    for off, key, col, nm in ((-0.19, "rho_mean_k4", "#0072B2", "k=4"), (0.19, "rho_mean_pad", "#E69F00", "padding")):
+        ts = [get(c, key) for c in names]
+        ax[0].bar(x + off, [t[0] for t in ts], 0.36, color=col, label=nm,
+                  yerr=[[t[0] - t[1] for t in ts], [t[2] - t[0] for t in ts]], error_kw={"lw": 0.8, "capsize": 1.5})
+    ax[0].set_title("(a) mean $\\rho$ vs $k{=}1$", fontsize=8); ax[0].legend(fontsize=6, frameon=False)
+    ts1 = [dacc(f"{pre}_k4{suf}", f"{pre}_k1{suf}") for _, _, pre, suf in cells]
+    ts2 = [get(c, "dacc_k4_pad") for c in names]
+    for off, ts, col, nm in ((-0.19, ts1, "#0072B2", "k=4 vs k=1"), (0.19, ts2, "#E69F00", "k=4 vs padding")):
+        ax[1].bar(x + off, [100 * t[0] for t in ts], 0.36, color=col, label=nm,
+                  yerr=[[100 * (t[0] - t[1]) for t in ts], [100 * (t[2] - t[0]) for t in ts]], error_kw={"lw": 0.8, "capsize": 1.5})
+    ax[1].axhline(0, color="k", lw=0.6); ax[1].set_title("(b) accuracy difference (pts)", fontsize=8)
+    ax[1].legend(fontsize=6, frameon=False)
+    for a in ax:
+        a.set_xticks(x); a.set_xticklabels(lab, fontsize=5.5); a.tick_params(axis="y", labelsize=6)
+        a.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(ROOT / "paper" / "figures" / "fig_math.pdf")
 with open(ROOT / "analysis" / "results_math.csv", "w", newline="") as f:
     csv.writer(f).writerows([["cell", "key", "point", "lo", "hi"]] + out)
 print(f"wrote MATH-500 tables for {len(rows)} cells")
