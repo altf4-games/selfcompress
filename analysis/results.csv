@@ -91,6 +91,16 @@ seed,q06_f16,rho_k4_mean_s1,0.5580,0.4879,0.6197
 seed,q06_f16,rho_k4_median_s2,0.6138,0.5124,0.6758
 seed,q06_f16,rho_k4_mean_s2,0.5964,0.5410,0.6444
 seed,q06_f16,k1_seed_noise_mean,-0.0610,-0.1869,0.0542
+seed,q06_q8,rho_k4_median_s1,0.6265,0.5112,0.7109
+seed,q06_q8,rho_k4_mean_s1,0.5808,0.5254,0.6304
+seed,q06_q8,rho_k4_median_s2,0.6531,0.5470,0.7044
+seed,q06_q8,rho_k4_mean_s2,0.6041,0.5466,0.6580
+seed,q06_q8,k1_seed_noise_mean,0.0126,-0.0948,0.1083
+seed,q06_q4,rho_k4_median_s1,0.5922,0.5191,0.6392
+seed,q06_q4,rho_k4_mean_s1,0.5397,0.4916,0.5858
+seed,q06_q4,rho_k4_median_s2,0.5844,0.4943,0.6452
+seed,q06_q4,rho_k4_mean_s2,0.5620,0.5013,0.6171
+seed,q06_q4,k1_seed_noise_mean,0.0476,-0.0493,0.1265
 tail,q17_f16,rho_k4_p50,0.5444,0.4693,0.6138
 tail,q17_f16,rho_k4_p90,0.5173,0.4342,0.6124
 tail,q17_f16,rho_pad_p50,0.2970,0.1311,0.3809
