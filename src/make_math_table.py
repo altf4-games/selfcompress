@@ -93,24 +93,21 @@ for model, prec, prefix, suf in CELLS:
     for a in ("k1", "k4", "pad"):
         out.append([prefix + suf, f"om_{a}", 100 * run(f"{prefix}_{a}{suf}")["om"].mean(), 0, 0])
 if rows:
-    tex = ["\\begin{table*}[t]", "\\centering", "\\footnotesize",
+    tex = ["\\begin{table*}[!t]", "\\centering", "\\footnotesize",
            "\\caption{MATH-500 (levels 1--3, 100 questions). $\\rho$ relative to $k{=}1$; ratio = $L$ of $k{=}4$ over the padding control; "
            "length statistics are group-of-four means.}", "\\label{tab:math}", "\\resizebox{\\textwidth}{!}{%", "\\begin{tabular}{llcccccccc}", "\\toprule",
            "Model & Prec. & Acc k=1 (\\%) & Acc k=4 (\\%) & $\\Delta$ acc (pts) & $\\rho_{med}$ k=4 & $\\rho_{mean}$ k=4 & "
            "$\\rho_{med}$ pad & $\\rho_{mean}$ pad & Cap hit k=1/k=4 (\\%) \\\\", "\\midrule"]
-    tex += [" & ".join(r[:9] + [r[-1]]) + " \\\\" for r in rows]
+    merged = []
+    for (model, prec, prefix, suf), r in zip([c for c in CELLS if complete(c[2], c[3])], rows):
+        o = {x[1]: x for x in out if x[0] == prefix + suf}
+        merged.append(r[:5] + [r[6], r[8], r[10], fmt(o["dacc_k4_pad"][2:], 1, 100), f"{o['om_k4'][2]:.0f}", r[-1]])
+    tex[tex.index("\\begin{tabular}{llcccccccc}")] = "\\begin{tabular}{llcccccccccc}"
+    tex[-2] = ("Model & Prec. & Acc k=1 (\\%) & Acc k=4 (\\%) & $\\Delta$ acc (pts) & $\\rho_{mean}$ k=4 & $\\rho_{mean}$ pad & "
+               "$L_{mean}$ k=4 / pad & $\\Delta$ acc k=4 $-$ pad & Omitted k=4 (\\%) & Cap hit k=1/k=4 (\\%) \\\\")
+    tex += [" & ".join(r) + " \\\\" for r in merged]
     tex += ["\\bottomrule", "\\end{tabular}}", "\\end{table*}"]
     (ROOT / "paper" / "tables" / "tab_math.tex").write_text("\n".join(tex) + "\n", encoding="utf-8")
-    rt = ["\\begin{table}[t]", "\\centering", "\\footnotesize",
-          "\\caption{MATH-500: length of $k{=}4$ relative to the padding control (95\\% CI) and accuracy difference.}",
-          "\\label{tab:mathpad}", "\\resizebox{\\columnwidth}{!}{%", "\\begin{tabular}{llccc}", "\\toprule",
-          "Model & Prec. & $L_{med}$ k=4 / pad & $L_{mean}$ k=4 / pad & $\\Delta$ acc k=4 $-$ pad \\\\", "\\midrule"]
-    for (model, prec, prefix, suf) in [c for c in CELLS if complete(c[2], c[3])]:
-        o = {x[1]: x for x in out if x[0] == prefix + suf}
-        rt.append(f"{model} & {prec} & {fmt(o['ratio_med_k4_pad'][2:])} & {fmt(o['ratio_mean_k4_pad'][2:])} & "
-                  f"{fmt(o['dacc_k4_pad'][2:], 1, 100)} \\\\")
-    rt += ["\\bottomrule", "\\end{tabular}}", "\\end{table}"]
-    (ROOT / "paper" / "tables" / "tab_mathpad.tex").write_text("\n".join(rt) + "\n", encoding="utf-8")
 if rows:
     import matplotlib
     matplotlib.use("Agg")

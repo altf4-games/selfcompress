@@ -102,7 +102,7 @@ def fmt(t, d=2, pct=False):
 def write_tex(name, header, rows, caption, label, star=True):
     env = "table*" if star else "table"
     cols = "ll" + "c" * (len(header) - 2)
-    lines = [f"\\begin{{{env}}}[t]", "\\centering", "\\footnotesize", f"\\caption{{{caption}}}", f"\\label{{{label}}}",
+    lines = [f"\\begin{{{env}}}[!t]", "\\centering", "\\footnotesize", f"\\caption{{{caption}}}", f"\\label{{{label}}}",
              f"\\resizebox{{\\{'textwidth' if star else 'columnwidth'}}}{{!}}{{%",
              f"\\begin{{tabular}}{{{cols}}}", "\\toprule", " & ".join(header) + " \\\\", "\\midrule"]
     lines += [" & ".join(r) + " \\\\" for r in rows]
@@ -147,8 +147,7 @@ for m, p, c in CELLS:
         t = ratio(f"{c}_k4", f"{c}_pad", f); r.append(fmt(t)); log("pad", c, f"ratio_k4_pad_{fn}", t)
     t = dacc(f"{c}_k4", f"{c}_pad"); r.append(fmt(t, 1, True)); log("pad", c, "dacc_k4_pad", t)
     rows.append(r)
-write_tex("tab_pad", ["Model", "Prec.", "$\\rho_{med}$ padding", "$\\rho_{mean}$ padding", "$L_{med}$ k=4 / pad", "$L_{mean}$ k=4 / pad", "$\\Delta$ acc k=4 $-$ pad"],
-          rows, "Padding control (k=1 plus filler matched to the k=4 prompt length). A ratio below 1 means the k=4 prompt yields shorter reasoning than padding alone.", "tab:pad")
+pad_rows = rows
 
 # ---- Table IV: other controls (F16 only)
 rows = []
@@ -182,12 +181,12 @@ write_tex("tab_seed", ["Model", "Prec.", "$\\rho_{med}$ s1", "$\\rho_{mean}$ s1"
 # ---- Table VI: failure and structure diagnostics
 rows = []
 for m, p, c in CELLS:
-    for k in (1, 4):
-        d = run(f"{c}_k{k}")
-        rows.append([m, p, str(k), f"{100 * np.mean(d['meta']['loop']):.1f}", f"{100 * np.mean(d['meta']['repeat']):.1f}",
-                     f"{100 * np.mean(d['meta']['empty_think']):.1f}", f"{100 * d['meta']['think'] / d['meta']['comp']:.0f}"])
-write_tex("tab_diag", ["Model", "Prec.", "k", "Loop (\\%)", "Repeat (\\%)", "Empty think (\\%)", "Think share of tokens (\\%)"],
-          rows, "Diagnostics per generation: loop = cap hit and a 10-gram repeated at least 50 times in the last 1500 words; repeat = repeated 10-gram only.", "tab:diag", star=False)
+    d1, d4 = run(f"{c}_k1")["meta"], run(f"{c}_k4")["meta"]
+    pair = lambda key, f=1: f"{100 * np.mean(d1[key]) * f:.1f} / {100 * np.mean(d4[key]):.1f}"  # noqa: E731
+    share = lambda d: f"{100 * d['think'] / d['comp']:.0f}"  # noqa: E731
+    rows.append([m, p, pair("loop"), pair("repeat"), pair("empty_think"), f"{share(d1)} / {share(d4)}"])
+write_tex("tab_diag", ["Model", "Prec.", "Loop (\%)", "Repeat (\%)", "Empty think (\%)", "Think share (\%)"],
+          rows, "Diagnostics per generation, $k{=}1$ / $k{=}4$: loop = cap hit and a 10-gram repeated at least 50 times in the last 1500 words; repeat = repeated 10-gram only; think share = thinking tokens over completion tokens.", "tab:diag", star=False)
 
 # ---- Table VII: tail test. rho at the median and the 90th percentile of per-question length
 def rho_gq(a, b, q):
@@ -207,8 +206,10 @@ for m, p, c in CELLS:
     for q in (0.5, 0.9):
         log("tail", c, f"ratio_k4_pad_p{int(q * 100)}", ratio_gq(f"{c}_k4", f"{c}_pad", q))
     rows.append(r)
-write_tex("tab_tail", ["Model", "Prec.", "$\\rho$ k=4, p50", "$\\rho$ k=4, p90", "$\\rho$ padding, p50", "$\\rho$ padding, p90"],
-          rows, "Group-level compression: $\\rho$ at the median (p50) and 90th percentile (p90) of the mean tokens per question over groups of four questions, computed the same way for every arm.", "tab:tail")
+rows = [pr[:4] + [tr[3], tr[5]] + pr[4:] for pr, tr in zip(pad_rows, rows)]
+write_tex("tab_pad", ["Model", "Prec.", "$\\rho_{med}$ pad", "$\\rho_{mean}$ pad", "$\\rho_{p90}$ k=4", "$\\rho_{p90}$ pad",
+                      "$L_{med}$ k=4 / pad", "$L_{mean}$ k=4 / pad", "$\\Delta$ acc k=4 $-$ pad"],
+          rows, "Padding control ($k{=}1$ plus filler matched to the $k{=}4$ prompt length) and tail test. $\\rho_{p90}$ is the reduction at the 90th percentile of group-level length. A ratio below 1 means the $k{=}4$ prompt yields shorter reasoning than padding alone.", "tab:pad")
 
 # ---- Figure 2: complementary CDF of per-question length (log x), tail shown directly
 import matplotlib
