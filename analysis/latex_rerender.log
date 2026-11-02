@@ -69,13 +69,13 @@ ady/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
 (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd)
 (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd)
 (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omspcr.fd)
-Underfull \hbox (badness 10000) in paragraph at lines 137--144
+Underfull \hbox (badness 10000) in paragraph at lines 136--143
 []\OT1/pcr/m/n/8 [system] Please reason step by step, and put
 
-Underfull \hbox (badness 10000) in paragraph at lines 137--144
+Underfull \hbox (badness 10000) in paragraph at lines 136--143
 \OT1/pcr/m/n/8 Answer each question separately and put each
 
-Underfull \hbox (badness 10000) in paragraph at lines 137--144
+Underfull \hbox (badness 10000) in paragraph at lines 136--143
 
 [2] (tables/tab_rho.tex) (tables/tab_pad.tex) (tables/tab_ext_ctrl.tex)
 (tables/tab_acc.tex) [3]
@@ -94,165 +94,7 @@ res/fig_main.pdf> <./figures/fig_dist.pdf>] (tables/tab_eff.tex)
 (tables/tab_math.tex) [6]
 Underfull \vbox (badness 6775) has occurred while \output is active [7 <./figur
 es/fig_math.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 380--383
-\OT1/pcr/m/n/10 src/extra_analysis.py \OT1/ptm/m/n/10 and
-(main.bbl)
-
-** Conference Paper **
-Before submitting the final camera ready copy, remember to:
-
- 1. Manually equalize the lengths of two columns on the last page
- of your paper;
-
- 2. Ensure that any PostScript and/or PDF output post-processing
- uses only Type 1 fonts and that every step in the generation
- process uses the appropriate paper size.
-
-[8] (main.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- )
-(see the transcript file for additional information)<C:/Users/prady/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/prady/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/
-prady/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C
-:/Users/prady/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi
-8.pfb><C:/Users/prady/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmr10.pfb><C:/Users/prady/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmr6.pfb><C:/Users/prady/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/amsfonts/cm/cmr8.pfb><C:/Users/prady/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/prady/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/prady/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/prady/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/prady/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/prady/AppData/Local/P
-rograms/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/prady/AppData/Local/P
-rograms/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (8 pages, 298735 bytes).
-Transcript written on main.log.
-Latexmk: Getting log file 'main.log'
-Latexmk: Examining 'main.fls'
-Latexmk: Examining 'main.log'
-Latexmk: Found input bbl file 'main.bbl'
-Latexmk: References changed.
-Latexmk: Log file says output to 'main.pdf'
-Latexmk: Using bibtex to make bibliography file(s).
-  ===Source file 'main.bbl' for 'pdflatex'
-Latexmk: Found bibliography file(s):
-  ./refs.bib
-Latexmk: applying rule 'bibtex main'...
-Rule 'bibtex main':  Reasons for rerun
-Changed files or newly in use/created:
-  main.aux
-
-------------
-Run number 1 of rule 'bibtex main'
-------------
-------------
-Running 'bibtex  "main.aux"'
-------------
-This is BibTeX, Version 0.99e (MiKTeX 25.12)
-The top-level auxiliary file: main.aux
-The style file: IEEEtran.bst
-Database file #1: refs.bib
--- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
--- http://www.michaelshell.org/tex/ieeetran/bibtex/
--- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
-
-Done.
-Latexmk: applying rule 'pdflatex'...
-Rule 'pdflatex':  Reasons for rerun
-Changed files or newly in use/created:
-  main.aux
-
-------------
-Run number 2 of rule 'pdflatex'
-------------
-------------
-Running 'pdflatex  -interaction=nonstopmode -recorder  "main.tex"'
-------------
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex.fmt)
- restricted \write18 enabled.
-entering extended mode
-(main.tex
-LaTeX2e <2025-11-01>
-L3 programming layer <2025-12-24>
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/ieeetran\IEEEtran.cls
-Document Class: IEEEtran 2015/08/26 V1.8b by Michael Shell
--- See the "IEEEtran_HOWTO" manual for usage information.
--- http://www.michaelshell.org/tex/ieeetran/
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd)
--- Using 8.5in x 11in (letter) paper.
--- Using PDF output.
--- This is a 10 point document.
-) (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/cite\cite.sty)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
-For additional information on amsmath, use the `?' option.
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty))
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty))
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty))
- (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
-fg)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
-))) (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
-) (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
-) (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/placeins\placeins.sty)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
-tex.def) (main.aux)
--- Lines per column: 56 (exact).
-
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
-ii
-[Loading MPS to PDF converter (version 2006.09.02).]
-)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
-ase.sty
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.c
-fg)) (C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd)
-[1{C:/Users/prady/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/pr
-ady/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd)
-(C:\Users\prady\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omspcr.fd)
-Underfull \hbox (badness 10000) in paragraph at lines 137--144
-[]\OT1/pcr/m/n/8 [system] Please reason step by step, and put
-
-Underfull \hbox (badness 10000) in paragraph at lines 137--144
-\OT1/pcr/m/n/8 Answer each question separately and put each
-
-Underfull \hbox (badness 10000) in paragraph at lines 137--144
-
-[2] (tables/tab_rho.tex) (tables/tab_pad.tex) (tables/tab_ext_ctrl.tex)
-(tables/tab_acc.tex) [3]
-
-LaTeX Warning: Text page 4 contains only floats.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active
-
-LaTeX Warning: Text page 4 contains only floats.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active [4 <./figu
-res/fig_main.pdf> <./figures/fig_dist.pdf>] (tables/tab_eff.tex)
-(tables/tab_ext_models.tex) [5 <./figures/fig_k.pdf>] (tables/tab_ext_math.tex)
-(tables/tab_math.tex) [6]
-Underfull \vbox (badness 6775) has occurred while \output is active [7 <./figur
-es/fig_math.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 380--383
+Underfull \hbox (badness 10000) in paragraph at lines 379--382
 \OT1/pcr/m/n/10 src/extra_analysis.py \OT1/ptm/m/n/10 and
 (main.bbl)
 
@@ -283,7 +125,7 @@ ograms/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/prady/AppData/Local/Pr
 ograms/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/prady/AppData/Local/P
 rograms/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/prady/AppData/Local/P
 rograms/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (8 pages, 298735 bytes).
+Output written on main.pdf (8 pages, 298669 bytes).
 Transcript written on main.log.
 Latexmk: Getting log file 'main.log'
 Latexmk: Examining 'main.fls'
