@@ -91,8 +91,10 @@ LaTeX Warning: Text page 4 contains only floats.
 Underfull \vbox (badness 10000) has occurred while \output is active [4 <./figu
 res/fig_main.pdf> <./figures/fig_dist.pdf>] (tables/tab_eff.tex)
 (tables/tab_ext_models.tex) [5 <./figures/fig_k.pdf>] (tables/tab_ext_math.tex)
-(tables/tab_math.tex) [6 <./figures/fig_math.pdf>] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 378--381
+(tables/tab_math.tex) [6]
+Underfull \vbox (badness 6775) has occurred while \output is active [7 <./figur
+es/fig_math.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 380--383
 \OT1/pcr/m/n/10 src/extra_analysis.py \OT1/ptm/m/n/10 and
 (main.bbl)
 
@@ -127,7 +129,7 @@ ograms/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/prady/AppData/Local/Pr
 ograms/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/prady/AppData/Local/P
 rograms/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/prady/AppData/Local/P
 rograms/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (8 pages, 298424 bytes).
+Output written on main.pdf (8 pages, 298735 bytes).
 Transcript written on main.log.
 Latexmk: Getting log file 'main.log'
 Latexmk: Examining 'main.fls'
@@ -247,8 +249,10 @@ LaTeX Warning: Text page 4 contains only floats.
 Underfull \vbox (badness 10000) has occurred while \output is active [4 <./figu
 res/fig_main.pdf> <./figures/fig_dist.pdf>] (tables/tab_eff.tex)
 (tables/tab_ext_models.tex) [5 <./figures/fig_k.pdf>] (tables/tab_ext_math.tex)
-(tables/tab_math.tex) [6 <./figures/fig_math.pdf>] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 378--381
+(tables/tab_math.tex) [6]
+Underfull \vbox (badness 6775) has occurred while \output is active [7 <./figur
+es/fig_math.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 380--383
 \OT1/pcr/m/n/10 src/extra_analysis.py \OT1/ptm/m/n/10 and
 (main.bbl)
 
@@ -279,7 +283,7 @@ ograms/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/prady/AppData/Local/Pr
 ograms/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/prady/AppData/Local/P
 rograms/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/prady/AppData/Local/P
 rograms/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (8 pages, 298406 bytes).
+Output written on main.pdf (8 pages, 298735 bytes).
 Transcript written on main.log.
 Latexmk: Getting log file 'main.log'
 Latexmk: Examining 'main.fls'
