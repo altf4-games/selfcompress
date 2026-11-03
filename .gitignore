@@ -13,3 +13,6 @@ paper/*.out
 analysis/conpress.txt
 analysis/page*.png
 analysis/cache/
+
+paper/
+docs/

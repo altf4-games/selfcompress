@@ -5,14 +5,13 @@ independent questions) appears in Qwen3-0.6B and Qwen3-1.7B, and whether it surv
 quantization. Runtime: llama.cpp b12019 (commit 1052f7e1d). Data: GSM8K test (300 questions, seed 20261031) and
 MATH-500 levels 1-3 (100 questions, seed 20261101, plus 136 further questions, seed 20261102). Extended batch: k=8,
 Qwen3-4B (Q4_K_M), DeepSeek-R1-Distill-Qwen-1.5B (F16), statement/empty/concise controls on Q4_K_M, a third seed.
-The paper is in `paper/`.
 
 ## Layout
 - `data/` fixed question lists and the scripts that make them
 - `configs/` one YAML per run (model, GGUF, k, condition, seed, sampling); `configs/queue*.txt` are run queues
 - `src/prompts.py` prompt builder and controls; `src/run.py` async, resumable llama.cpp client writing `runs/<id>.jsonl`
 - `src/score.py` Math-Verify scoring, omission / cap-hit / loop detectors
-- `src/make_tables.py`, `src/make_math_table.py` canonical analysis (group-level lengths, cluster bootstrap) -> `paper/tables`, `paper/figures`, `analysis/*.csv`
+- `src/make_tables.py`, `src/make_math_table.py` canonical analysis (group-level lengths, cluster bootstrap) -> `analysis/*.csv`
 - `src/analyze.py` per-run summaries (not the canonical length statistics, see its docstring)
 - `src/handcheck*.py`, `src/test_score.py` validity checks
 - `runs/` raw generation logs (never edited); `scripts/` server, conversion and queue helpers
@@ -25,9 +24,9 @@ The paper is in `paper/`.
 4. Extended batch: `python scripts/download_extra.py` (Qwen3-4B, R1-Distill-Qwen-1.5B checkpoints), `scripts/convert_extra.ps1`,
    `python scripts/make_ext_cfg.py`, then `python scripts/queue.py configs/queue_x1.txt` (also `queue_x2.txt`, `queue_x3.txt`, `queue_fill2.txt`).
 5. `python src/make_tables.py`, `src/make_math_table.py`, `src/extra_analysis.py` and `src/make_ext_tables.py` regenerate all tables and figures
-   (`analysis/*.csv`; the k-sweep, extra-model and seed tables are in `analysis/results_ext.csv`); `latexmk -pdf` in `paper/`.
+   (`analysis/*.csv`; the k-sweep, extra-model and seed tables are in `analysis/results_ext.csv`).
 
 ## Notes
 - Sampling is temperature 0.6, top_p 0.95, top_k 20, min_p 0, max 8192 new tokens, thinking mode on.
 - Only an RTX 4060 Laptop GPU (8 GB) was used.
-- No license has been chosen yet.
+- Copyright (c) 2026 Pradyum Mistry and Dr. Smita Sankhe. All rights reserved; see `LICENSE`.
